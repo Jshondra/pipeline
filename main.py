@@ -54,9 +54,9 @@ def saving_in_db_process(queue_frames, len_frames, queue_time, file_name):
 
 if __name__ == '__main__':
 
-    q = multiprocessing.Queue()
-    c = multiprocessing.Queue()
-    x = multiprocessing.Queue()
+    frames_queue = multiprocessing.Queue()
+    res_queue = multiprocessing.Queue()
+    time_queue = multiprocessing.Queue()
     try:
         os.mkdir("./out")
     except FileExistsError:
@@ -65,12 +65,13 @@ if __name__ == '__main__':
         cap = cv2.VideoCapture("./in/" + filename)
         length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
         p1 = multiprocessing.Process(target=reading_process,
-                                     args=(q, length, x, filename, ), name="p1")
+                                     args=(frames_queue, length,
+                                           time_queue, filename, ), name="p1")
         p2 = multiprocessing.Process(target=refactor_frame_process,
-                                     args=(q, c, length,), name="p2")
+                                     args=(frames_queue, res_queue, length,), name="p2")
         p3 = multiprocessing.Process(
                                     target=saving_in_db_process,
-                                    args=(c, length, x, filename), name="p3",)
+                                    args=(res_queue, length, time_queue, filename), name="p3",)
         processes = [p1, p2, p3]
 
         for p in processes:
