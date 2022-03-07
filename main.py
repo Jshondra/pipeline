@@ -57,7 +57,10 @@ if __name__ == '__main__':
     q = multiprocessing.Queue()
     c = multiprocessing.Queue()
     x = multiprocessing.Queue()
-
+    try:
+        os.mkdir("./out")
+    except FileExistsError:
+        pass
     for filename in os.listdir("./in"):
         cap = cv2.VideoCapture("./in/" + filename)
         length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
