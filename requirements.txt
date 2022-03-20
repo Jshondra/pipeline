@@ -1,5 +1,5 @@
 python==3.9
 numpy==1.22.2
 opencv-python==4.5.5.62
-rle==1.1
+python-rle==0.0.3
 SQLAlchemy==1.4.31
